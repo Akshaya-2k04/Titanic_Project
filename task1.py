@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[3]:
+# In[40]:
 
 
 # Import necessary libraries
@@ -20,7 +20,7 @@ from sklearn import *
 
 # 
 
-# In[4]:
+# In[41]:
 
 
 # Load Titanic dataset (can be downloaded from Kaggle or use this GitHub-hosted CSV)
@@ -31,7 +31,7 @@ df = pd.read_csv(url)
 df.head()
 
 
-# In[5]:
+# In[42]:
 
 
 # Check for missing values
@@ -51,6 +51,10 @@ df.dropna(subset=['Survived'], inplace=True)
 missing_values_after = df.isnull().sum()
 print("\nMissing values after imputation:\n", missing_values_after)
 
+
+# In[43]:
+
+
 # Function to remove outliers using IQR
 def remove_outliers_iqr(df, column):
     Q1 = df[column].quantile(0.25)
@@ -69,7 +73,7 @@ df = remove_outliers_iqr(df, 'Fare')
 print("\nDataset shape after removing outliers:", df.shape)
 
 
-# In[7]:
+# In[44]:
 
 
 # One-Hot Encoding for categorical variables 'Sex' and 'Embarked'
@@ -79,7 +83,18 @@ df_encoded = pd.get_dummies(df, columns=['Sex', 'Embarked'], drop_first=True)
 df_encoded.head()
 
 
-# In[8]:
+# In[45]:
+
+
+# Scale numerical features 'Age' and 'Fare' using StandardScaler
+scaler = StandardScaler()
+df_encoded[['Age', 'Fare']] = scaler.fit_transform(df_encoded[['Age', 'Fare']])
+
+# Display the first few rows of the scaled dataset
+df_encoded.head()
+
+
+# In[46]:
 
 
 # Plot histograms for numerical features
@@ -88,12 +103,7 @@ plt.suptitle('Histograms of Numerical Features', fontsize=16)
 plt.show()
 
 
-# Scale numerical features 'Age' and 'Fare' using StandardScaler
-scaler = StandardScaler()
-df_encoded[['Age', 'Fare']] = scaler.fit_transform(df_encoded[['Age', 'Fare']])
-
-# Display the first few rows of the scaled dataset
-df_encoded.head()# In[9]:
+# In[47]:
 
 
 import seaborn as sns
@@ -101,13 +111,13 @@ import matplotlib.pyplot as plt
 
 # Plot count plot for 'Survived' (target variable)
 plt.figure(figsize=(10, 6))
-sns.countplot(data=df_encoded, x='Survived', palette='pastel')
+sns.countplot(data=df_encoded, x='Survived', hue='Survived', palette='pastel', legend=False)
 plt.title('Count Plot for Survived', fontsize=16)
 plt.show()
 
 # Plot count plot for 'Embarked' (categorical feature)
 plt.figure(figsize=(10, 6))
-sns.countplot(data=df_encoded, x='Embarked_S', palette='pastel')
+sns.countplot(data=df_encoded, x='Embarked_S', hue='Embarked_S', palette='pastel', legend=False)
 plt.title('Count Plot for Embarked', fontsize=16)
 plt.show()
 
