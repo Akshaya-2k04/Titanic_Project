@@ -51,10 +51,6 @@ df.dropna(subset=['Survived'], inplace=True)
 missing_values_after = df.isnull().sum()
 print("\nMissing values after imputation:\n", missing_values_after)
 
-
-# In[6]:
-
-
 # Function to remove outliers using IQR
 def remove_outliers_iqr(df, column):
     Q1 = df[column].quantile(0.25)
@@ -92,7 +88,12 @@ plt.suptitle('Histograms of Numerical Features', fontsize=16)
 plt.show()
 
 
-# In[9]:
+# Scale numerical features 'Age' and 'Fare' using StandardScaler
+scaler = StandardScaler()
+df_encoded[['Age', 'Fare']] = scaler.fit_transform(df_encoded[['Age', 'Fare']])
+
+# Display the first few rows of the scaled dataset
+df_encoded.head()# In[9]:
 
 
 import seaborn as sns
